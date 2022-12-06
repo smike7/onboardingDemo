@@ -34,7 +34,7 @@ class firstVC: UIViewController {
     
     private lazy var startBtn: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Start", for: .normal)
+        btn.setTitle("Go To Profile", for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         btn.setTitleColor(.black, for: .normal)
         btn.backgroundColor = .white
@@ -47,15 +47,24 @@ class firstVC: UIViewController {
         btn.layer.masksToBounds = false
         return btn
     }()
+    private lazy var imageStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.distribution = .fillEqually
+        sv.alignment = .center
+        sv.spacing = 10
+        return sv
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
+        view.backgroundColor = .systemBackground
         setupLayout()
         startBtn.addTarget(self, action: #selector(startTapped), for: .touchUpInside)
     }
 
     @objc private func startTapped() {
-        print("Tapped")
+        self.dismiss(animated: true)
     }
 }
 //MARK: - Layout Constraints
@@ -63,9 +72,9 @@ extension firstVC {
     func setupLayout() {
         view.addSubview(largeTitleLbl)
         largeTitleLbl.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.top)
+            make.top.equalToSuperview()
                 .offset(150)
-            make.left.right.equalTo(view)
+            make.left.right.equalToSuperview()
                 .offset(20)
         }
         
@@ -73,22 +82,18 @@ extension firstVC {
         subTitleLbl.snp.makeConstraints { make in
             make.top.equalTo(largeTitleLbl.snp.bottom)
                 .offset(12)
-            make.left.right.equalTo(view)
+            make.left.right.equalToSuperview()
                 .offset(20)
         }
-        let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.distribution = .fillEqually
-        sv.alignment = .center
-        sv.spacing = 10
-        view.addSubview(sv)
         
-        sv.snp.makeConstraints { make in
+        view.addSubview(imageStackView)
+        
+        imageStackView.snp.makeConstraints { make in
             make.top.equalTo(subTitleLbl.snp.bottom)
                 .offset(40)
-            make.right.equalTo(view)
+            make.right.equalToSuperview()
                 .offset(-20)
-            make.left.equalTo(view)
+            make.left.equalToSuperview()
                 .offset(20)
             make.height.equalTo(166)
         }
@@ -97,7 +102,7 @@ extension firstVC {
             guard let img = UIImage(named: imageName) else {continue}
             imageV.image = img
             imageV.contentMode = .scaleToFill
-            sv.addArrangedSubview(imageV)
+            imageStackView.addArrangedSubview(imageV)
         }
         
         view.addSubview(startBtn)
@@ -105,13 +110,11 @@ extension firstVC {
             make.bottom.equalTo(view.snp.bottom)
                 .offset(-150)
             make.height.equalTo(45)
-            make.right.equalTo(view)
+            make.right.equalToSuperview()
                 .offset(-20)
-            make.left.equalTo(view)
+            make.left.equalToSuperview()
                 .offset(20)
         }
-        
-        
     }
     
     
